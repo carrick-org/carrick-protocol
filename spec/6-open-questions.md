@@ -90,26 +90,21 @@ the move (`moved_from`).
 *Question:* is the confirmation enough on its own? Should the key belong to the owner rather than
 the provider, and how is it rotated?
 
-## Q11. Export can't be held back
-
-The draft says a provider MUST NOT hold back an export for any reason other than proving it is the
-owner, including unpaid bills. This is a promise to owners. *Question:* is this the right line?
-
-## Q12. The other tools
+## Q11. The other tools
 
 `search_archive`, `source`, `about` and `stats` are in our server but not in Core.
 
 *Question:* should they become an optional "Archive" level, so that agents can rely on them where
 they exist?
 
-## Q13. A discovery document for every server
+## Q12. A discovery document for every server
 
 Today the discovery document (`/.well-known/lodestone`) belongs to Federation, so a Core-only
 server has no standard way to say which levels it supports.
 
 *Question:* require a minimal discovery document (`protocol`, `base_url`, `levels`) in Core?
 
-## Q14. Small inconsistencies in Federation
+## Q13. Small inconsistencies in Federation
 
 - The discovery document has `"owner": {"display_name": "Alex"}`, while federation responses have
   `"owner": "Alex"`.
@@ -118,12 +113,12 @@ server has no standard way to say which levels it supports.
 *Draft:* written down as they are. *Question:* tidy them in `lodestone/1` (by adding fields) or
 leave them for v2?
 
-## Q15. Prompts
+## Q14. Prompts
 
 Our server also offers MCP prompts (`catch-up`, `save-chat`, `search-memory`). *Question:* should
 their names be standard, so the same slash command works everywhere?
 
-## Q16. Name and trademark
+## Q15. Name and trademark
 
 The specification is named "Lodestone Protocol", and "Lodestone" is kept as a trademark (section 1).
 A trademark search has not been done yet.
