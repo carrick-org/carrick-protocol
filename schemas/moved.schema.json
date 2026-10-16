@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/moved.schema.json",
+  "title": "Lodestone moved record",
+  "description": "Served by the old server after the owner moves: in the discovery document, and as the body of every 410 response. See spec/5-moving.md (section 5.3).",
+  "type": "object",
+  "required": ["protocol", "moved", "signature"],
+  "properties": {
+    "protocol": {"const": "lodestone/1"},
+    "error": {"const": "moved"},
+    "moved": {"$ref": "#/$defs/moved"},
+    "signature": {
+      "description": "JWS with a detached payload (EdDSA): header..signature, signing the JCS form of `moved`.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+\\.\\.[A-Za-z0-9_-]+$"
+    },
+    "message": {"type": "string"}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "moved": {
+      "type": "object",
+      "required": ["from", "to", "at"],
+      "properties": {
+        "from": {"type": "string", "pattern": "^https?://[^/]+$"},
+        "to": {"type": "string", "pattern": "^https?://[^/]+$"},
+        "at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/discovery.schema.json",
+  "title": "Lodestone discovery document",
+  "description": "GET /.well-known/lodestone. See spec/4-federation.md (section 4.2) and spec/5-moving.md.",
+  "type": "object",
+  "required": ["protocol", "base_url"],
+  "properties": {
+    "protocol": {"const": "lodestone/1"},
+    "owner": {
+      "type": "object",
+      "properties": {"display_name": {"type": "string"}}
+    },
+    "base_url": {"type": "string", "pattern": "^https?://[^/]+$"},
+    "levels": {
+      "type": "array",
+      "items": {"enum": ["core", "federation", "moving"]},
+      "contains": {"const": "core"}
+    },
+    "endpoints": {
+      "type": "object",
+      "properties": {
+        "mcp": {"type": "string"},
+        "federation": {"type": "string"},
+        "export": {"type": "string"}
+      }
+    },
+    "publications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug", "mcp"],
+        "properties": {
+          "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,47}$"},
+          "title": {"type": "string"},
+          "mcp": {"type": "string"},
+          "release": {"type": "string"}
+        }
+      }
+    },
+    "keys": {
+      "description": "Moving: public keys that sign this owner's moved record.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kid", "kty", "crv", "x"],
+        "properties": {
+          "kid": {"type": "string"},
+          "kty": {"const": "OKP"},
+          "crv": {"const": "Ed25519"},
+          "x": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43}$"}
+        }
+      }
+    },
+    "moved_from": {
+      "description": "Moving: earlier base URLs of this owner, confirming a move here.",
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "moved": {"$ref": "moved.schema.json#/$defs/moved"},
+    "signature": {"type": "string"}
+  },
+  "dependentRequired": {"moved": ["signature"]},
+  "additionalProperties": true
+}

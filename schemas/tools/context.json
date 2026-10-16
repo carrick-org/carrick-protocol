@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/context.json",
+  "title": "Input of the `context` tool",
+  "description": "Catch up on a namespace: its pinned note, latest thread state and recent notes. Without a namespace, lists the namespaces.",
+  "type": "object",
+  "properties": {
+    "namespace": {
+      "type": "string",
+      "description": "A namespace, e.g. 'me' or 'proj/garden', or a project's name. Leave out to list the namespaces."
+    }
+  }
+}

@@ -1,0 +1,10 @@
+# Relation types for links. Without this file, the starter set in the specification applies.
+[member_of]
+inverse = "has_member"
+roles = ["lead", "member"]
+words = ["member", "team", "group", "club"]
+
+[knows]
+symmetric = true
+roles = ["friend", "colleague", "neighbour"]
+words = ["friend", "colleague", "knows", "neighbour"]

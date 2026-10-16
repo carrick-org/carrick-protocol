@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/forget.json",
+  "title": "Input of the `forget` tool",
+  "description": "Retract a note. Nothing is deleted.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Memory id (path) from recall, or its ULID."
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "reason"
+  ]
+}
