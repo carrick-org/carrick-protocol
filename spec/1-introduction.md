@@ -25,7 +25,8 @@ each provider, and providers compete on it:
 - the web interface;
 - storage, backups and encryption;
 - capture tools;
-- cost, and any extra features.
+- cost, billing and other commercial terms, such as what happens when a payment is missed;
+- any extra features.
 
 ## Levels
 

@@ -29,8 +29,6 @@ the two providers has to change.
   including files the server does not understand.
 - The bundle MUST NOT contain secrets: no tokens, passwords, keys or credentials.
 - Separately, the server MUST let the owner download a **connections file** (section 5.6).
-- Export MUST NOT be held back for any reason other than proving it is the owner, including unpaid
-  bills.
 
 ## 5.2 Import
 
