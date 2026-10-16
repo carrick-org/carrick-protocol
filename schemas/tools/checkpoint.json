@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/checkpoint.json",
+  "title": "Input of the `checkpoint` tool",
+  "description": "Save the state of a long-running thread, replacing its previous state.",
+  "type": "object",
+  "properties": {
+    "namespace": {
+      "type": "string",
+      "description": "Namespace, e.g. 'me' or 'proj/garden'."
+    },
+    "thread": {
+      "type": "string",
+      "description": "Thread name, e.g. 'phase-3 build'."
+    },
+    "state": {
+      "type": "string",
+      "description": "The state, in Markdown."
+    }
+  },
+  "required": [
+    "namespace",
+    "thread",
+    "state"
+  ]
+}

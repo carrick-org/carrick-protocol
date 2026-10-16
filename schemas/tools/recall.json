@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/recall.json",
+  "title": "Input of the `recall` tool",
+  "description": "Search the memory. Returns ranked hits with ids that `get` can read.",
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string",
+      "description": "What to look for, in natural language or keywords."
+    },
+    "namespace": {
+      "type": "string",
+      "description": "Limit to a namespace, e.g. 'proj/garden'."
+    },
+    "kinds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Kinds of document: 'memory' (notes) and 'digest' are defined; others depend on the server's archive."
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25,
+      "default": 8
+    }
+  },
+  "required": [
+    "query"
+  ]
+}

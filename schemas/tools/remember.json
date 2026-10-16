@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/remember.json",
+  "title": "Input of the `remember` tool",
+  "description": "Store one new note.",
+  "type": "object",
+  "properties": {
+    "namespace": {
+      "type": "string",
+      "description": "Namespace, e.g. 'me' or 'proj/garden'.",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}(/[a-z0-9][a-z0-9._-]{0,63}){0,4}$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "fact",
+        "decision",
+        "preference",
+        "person",
+        "entity"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "description": "A short, specific title.",
+      "maxLength": 200,
+      "minLength": 1
+    },
+    "body": {
+      "type": "string",
+      "description": "The memory itself, in Markdown.",
+      "minLength": 1
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Typed links, one per item: '[[A]] relation [[B]]', with optional '(role: brother, since: 2024-05)'."
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "For a person or entity: other names it goes by."
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "For kind 'entity': organisation, place, project, event or thing."
+    },
+    "pinned": {
+      "type": "boolean",
+      "description": "Make this the namespace's pinned note, replacing the current one. At most about 6,000 characters."
+    }
+  },
+  "required": [
+    "namespace",
+    "kind",
+    "title",
+    "body"
+  ]
+}

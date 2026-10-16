@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/note-frontmatter.schema.json",
+  "title": "Lodestone note frontmatter",
+  "description": "The frontmatter of a note, as read into JSON. Values are strings, lists of strings or maps of strings, because the frontmatter syntax has no other types. See spec/2-memory-format.md.",
+  "type": "object",
+  "required": ["id", "namespace", "kind", "title", "status", "created", "updated"],
+  "properties": {
+    "id": {
+      "description": "Permanent, unique within the repository. Writers SHOULD use a ULID.",
+      "type": "string",
+      "minLength": 1
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}(/[a-z0-9][a-z0-9._-]{0,63}){0,4}$"
+    },
+    "kind": {
+      "enum": ["fact", "decision", "preference", "person", "entity", "thread"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[^\\n]*$"
+    },
+    "status": {
+      "enum": ["active", "superseded", "retracted", "proposed"]
+    },
+    "created": {"$ref": "#/$defs/time"},
+    "updated": {"$ref": "#/$defs/time"},
+    "pinned": {
+      "description": "Present only on the namespace's pinned note.",
+      "enum": ["true"]
+    },
+    "tags": {"$ref": "#/$defs/strings"},
+    "author": {
+      "type": "object",
+      "properties": {
+        "agent": {"type": "string"},
+        "account": {"type": "string"},
+        "machine": {"type": "string"}
+      },
+      "additionalProperties": {"type": "string"}
+    },
+    "type": {
+      "description": "For an entity: organisation, place, project, event or thing. Other values are allowed.",
+      "type": "string"
+    },
+    "aliases": {"$ref": "#/$defs/strings"},
+    "sources": {"$ref": "#/$defs/strings"},
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\s*\\[\\[[^\\]]+\\]\\]\\s+[A-Za-z][A-Za-z0-9_ -]*?\\s+\\[\\[.+$"
+      }
+    },
+    "supersedes": {"$ref": "#/$defs/strings"},
+    "superseded_by": {"type": "string"},
+    "reason": {"type": "string"}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "time": {
+      "description": "RFC 3339 date and time with an offset.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "strings": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  }
+}

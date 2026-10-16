@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/get.json",
+  "title": "Input of the `get` tool",
+  "description": "Return a whole document by id.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "max_chars": {
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 200000,
+      "default": 40000
+    }
+  },
+  "required": [
+    "id"
+  ]
+}
