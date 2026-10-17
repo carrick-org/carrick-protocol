@@ -584,8 +584,9 @@ def check_moving(r: Report, base: str, doc: dict | None, token: str) -> None:
         r.unsupported(L, "no discovery file, so no way to announce a move")
         return
     export = (doc.get("endpoints") or {}).get("export")
-    if not export and "moving" not in (doc.get("levels") or []):
-        r.unsupported(L, "the discovery file neither lists `moving` in levels nor has endpoints.export")
+    if "moving" not in (doc.get("levels") or []):     # a server may offer export before it supports the whole level
+        r.unsupported(L, "the discovery file doesn't list `moving` in levels"
+                      + (" (it offers export, which is checked once the level is claimed)" if export else ""))
         return
     if not r.add(L, "discovery lists endpoints.export", bool(export), "no export endpoint"):
         return
