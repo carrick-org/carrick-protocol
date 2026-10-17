@@ -28,7 +28,9 @@ the two providers has to change.
 - The bundle MUST contain everything in chapter 2: `memory/`, `digests/`, `archive/` and `config/`,
   including files the server does not understand.
 - The bundle MUST NOT contain secrets: no tokens, passwords, keys or credentials.
-- Separately, the server MUST let the owner download a **connections file** (section 5.6).
+- Separately, the server MUST let the owner download a **connections file** (section 5.6), in its
+  user interface and at an address listed in the discovery file as `endpoints.connections` (for
+  example `"/export/connections.json"`), with the same access rules as the bundle.
 
 ## 5.2 Import
 
