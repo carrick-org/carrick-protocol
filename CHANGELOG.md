@@ -2,6 +2,11 @@
 
 ## 0.9 (draft), unreleased
 
+### 17 October 2026: the connections file's address
+
+- Section 5.1: the connections file is also listed in the discovery file, as
+  `endpoints.connections`, with the same access rules as the memory bundle.
+
 ### 17 October 2026: five open questions settled
 
 - **No breaking changes unless there is no other way** (section 1, Versioning). Any unavoidable

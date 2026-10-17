@@ -1,13 +1,34 @@
 {
   "protocol": "lodestone/1",
-  "owner": {"display_name": "Alex"},
+  "owner": {
+    "display_name": "Alex"
+  },
   "base_url": "https://lodestone.example.com",
-  "levels": ["core", "federation", "moving"],
-  "endpoints": {"mcp": "/mcp", "federation": "/federation/v1/", "export": "/export/memory.bundle"},
-  "publications": [
-    {"slug": "garden-notes", "title": "Garden notes",
-     "mcp": "https://lodestone.example.com/pub/garden-notes/mcp",
-     "release": "2026-10-14T09:00:00+00:00"}
+  "levels": [
+    "core",
+    "federation",
+    "moving"
   ],
-  "keys": [{"kid": "k1", "kty": "OKP", "crv": "Ed25519", "x": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo"}]
+  "endpoints": {
+    "mcp": "/mcp",
+    "federation": "/federation/v1/",
+    "export": "/export/memory.bundle",
+    "connections": "/export/connections.json"
+  },
+  "publications": [
+    {
+      "slug": "garden-notes",
+      "title": "Garden notes",
+      "mcp": "https://lodestone.example.com/pub/garden-notes/mcp",
+      "release": "2026-10-14T09:00:00+00:00"
+    }
+  ],
+  "keys": [
+    {
+      "kid": "k1",
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "x": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo"
+    }
+  ]
 }

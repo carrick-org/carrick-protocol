@@ -52,7 +52,12 @@
           "type": "string"
         },
         "export": {
-          "type": "string"
+          "type": "string",
+          "description": "Moving: where the owner downloads the memory as a git bundle."
+        },
+        "connections": {
+          "type": "string",
+          "description": "Moving: where the owner downloads the connections file."
         }
       }
     },
