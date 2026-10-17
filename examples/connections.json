@@ -2,11 +2,31 @@
   "protocol": "lodestone/1",
   "owner": "https://alex.old-provider.example",
   "peers_in": [
-    {"id": "p_7c2e", "person": "sam", "url": "https://sam.example", "owner": "Sam",
-     "credential_sha256": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"}
+    {
+      "url": "https://sam.example",
+      "owner": "Sam",
+      "person": "sam"
+    }
   ],
   "peers_out": [
-    {"url": "https://jo.example", "kind": "peer", "owner": "Jo"},
-    {"url": "https://news.example", "kind": "publication", "slug": "garden-notes", "owner": "News"}
+    {
+      "url": "https://jo.example",
+      "kind": "peer",
+      "owner": "Jo"
+    },
+    {
+      "url": "https://news.example",
+      "kind": "publication",
+      "slug": "garden-notes",
+      "owner": "News"
+    }
+  ],
+  "apps": [
+    {
+      "name": "Claude"
+    },
+    {
+      "name": "VS Code"
+    }
   ]
 }

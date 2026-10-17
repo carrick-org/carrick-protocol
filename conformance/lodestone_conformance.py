@@ -362,6 +362,9 @@ def check_writes(r: Report, mcp: Mcp) -> None:
         res = mcp.call("get", id=note["id"])
         r.add(L, "`get` reads the new note at once", not res.get("isError") and marker in text_of(res)
               and structured(res).get("id") == note["id"] and "text" in structured(res), short(res))
+        res = mcp.call("get", id=note["uid"])
+        r.add(L, "`get` reads a note by its uid too", not res.get("isError") and marker in text_of(res)
+              and structured(res).get("id") == note["id"], short(res))
         found = wait_for(lambda: note["id"] in [h.get("id") for h in
                                                  structured(mcp.call("recall", query=marker)).get("hits") or []])
         r.add(L, f"`recall` finds the new note (within {INDEX_WAIT}s)", found, f"searched for {marker}", should=True)
@@ -431,6 +434,7 @@ def check_writes(r: Report, mcp: Mcp) -> None:
 
         # bad input
         for label, args in (("a bad namespace", {"namespace": "Not A Namespace!", "kind": "fact"}),
+                            ("a namespace named like a kind folder", {"namespace": f"{ns}/people", "kind": "fact"}),
                             ("kind thread", {"namespace": ns, "kind": "thread"}),
                             ("an unknown kind", {"namespace": ns, "kind": "rumour"}),
                             ("an empty body", {"namespace": ns, "kind": "fact", "body": ""})):
@@ -440,10 +444,10 @@ def check_writes(r: Report, mcp: Mcp) -> None:
                 created.append(structured(res)["id"])
             r.add(L, f"`remember` with {label} is a tool error", res.get("isError") is True, short(res))
 
-        # forget
-        res = mcp.call("forget", id=note["id"], reason="conformance test")
-        r.add(L, "`forget` retracts the note", summary_ok(res) and structured(res).get("status") == "retracted",
-              short(res))
+        # forget, by uid
+        res = mcp.call("forget", id=note["uid"], reason="conformance test")
+        r.add(L, "`forget` retracts the note, given its uid", summary_ok(res)
+              and structured(res).get("status") == "retracted" and structured(res).get("id") == note["id"], short(res))
         if not res.get("isError"):
             created.remove(note["id"])
         r.add(L, "`recall` no longer finds a retracted note",
@@ -466,28 +470,45 @@ def check_writes(r: Report, mcp: Mcp) -> None:
 
 # --------------------------------------------------------------------------- Federation
 
-def check_federation(r: Report, base: str, publication: str, credential: str) -> dict | None:
-    L = "federation"
+def check_discovery(r: Report, base: str) -> dict | None:
+    """The discovery file every server has (section 3.12)."""
+    L = "core"
     resp = http("GET", base + "/.well-known/lodestone")
     doc = resp.body if isinstance(resp.body, dict) else None
-    if resp.status == 404:
-        r.unsupported(L, "no discovery document (/.well-known/lodestone is 404)")
-        return None
-    if not r.add(L, "discovery document (/.well-known/lodestone)", resp.status == 200 and doc is not None,
+    if not r.add(L, "discovery file (/.well-known/lodestone) without sign-in", resp.status == 200 and doc is not None,
                  f"HTTP {resp.status}: {short(resp.body)}"):
         return None
-    r.add(L, "protocol is lodestone/1", doc.get("protocol") == PROTOCOL, f"got {doc.get('protocol')!r}")
-    r.add(L, "base_url is the address used", str(doc.get("base_url", "")).rstrip("/") == base,
+    r.add(L, "discovery: protocol is lodestone/1", doc.get("protocol") == PROTOCOL, f"got {doc.get('protocol')!r}")
+    r.add(L, "discovery: base_url is the address used", str(doc.get("base_url", "")).rstrip("/") == base,
           f"got {doc.get('base_url')!r}, expected {base!r}")
-    r.add(L, "owner.display_name", isinstance(doc.get("owner"), dict) and bool(doc["owner"].get("display_name")),
-          f"got {doc.get('owner')!r}")
-    r.add(L, "levels are listed (new in 0.9)", isinstance(doc.get("levels"), list) and "core" in doc["levels"],
-          f"got {doc.get('levels')!r}", should=True)
+    levels = doc.get("levels")
+    r.add(L, "discovery: levels lists core", isinstance(levels, list) and "core" in levels
+          and set(levels) <= {"core", "federation", "moving"}, f"got {levels!r}")
+    if not doc.get("publications"):
+        r.add(L, "discovery: no owner name without a listed publication", "owner" not in doc,
+              f"got owner {doc.get('owner')!r}")
+    return doc
+
+
+def check_federation(r: Report, base: str, doc: dict | None, publication: str, credential: str) -> None:
+    L = "federation"
+    if doc is None:
+        resp = http("GET", base + "/.well-known/lodestone")
+        doc = resp.body if isinstance(resp.body, dict) else None
+    if doc is None or ("federation" not in (doc.get("levels") or [])
+                       and not (doc.get("endpoints") or {}).get("federation")):
+        r.unsupported(L, "the discovery file lists no `federation` level and no federation endpoint")
+        return
+    r.add(L, "discovery lists federation in levels", "federation" in (doc.get("levels") or []),
+          f"got {doc.get('levels')!r}")
     pubs = doc.get("publications")
     r.add(L, "publications is a list", isinstance(pubs, list), f"got {type(pubs).__name__}")
     for p in pubs or []:
         r.add(L, f"listed publication {p.get('slug')!r} has slug, title, mcp and release",
               all(p.get(k) for k in ("slug", "title", "mcp", "release")), short(p))
+    if pubs:
+        r.add(L, "owner.display_name (there is a listed publication)", isinstance(doc.get("owner"), dict)
+              and bool(doc["owner"].get("display_name")), f"got {doc.get('owner')!r}")
 
     fed = base + "/federation/v1"
     for method, path, body in (("GET", "shares", None), ("POST", "search", {"query": "test"})):
@@ -525,7 +546,6 @@ def check_federation(r: Report, base: str, publication: str, credential: str) ->
         _federation_endpoints(r, fed, credential, "peer")
     else:
         r.skip(L, "peer endpoints", "set LODESTONE_PEER_CREDENTIAL to check them as a peer")
-    return doc
 
 
 def _federation_endpoints(r: Report, root: str, credential: str, who: str) -> None:
@@ -561,11 +581,11 @@ def check_moving(r: Report, base: str, doc: dict | None, token: str) -> None:
         resp = http("GET", base + "/.well-known/lodestone")
         doc = resp.body if isinstance(resp.body, dict) else None
     if doc is None:
-        r.unsupported(L, "no discovery document, so no way to announce a move")
+        r.unsupported(L, "no discovery file, so no way to announce a move")
         return
     export = (doc.get("endpoints") or {}).get("export")
     if not export and "moving" not in (doc.get("levels") or []):
-        r.unsupported(L, "the discovery document neither lists `moving` in levels nor has endpoints.export")
+        r.unsupported(L, "the discovery file neither lists `moving` in levels nor has endpoints.export")
         return
     if not r.add(L, "discovery lists endpoints.export", bool(export), "no export endpoint"):
         return
@@ -691,6 +711,8 @@ def check_repo(r: Report, root: Path) -> None:
             problems.append(f"{rel}: namespace {meta['namespace']!r} does not match its folder {ns!r}")
         if not NAMESPACE_RE.match(str(meta["namespace"])) or any(s.startswith("_") for s in ns.split("/")):
             problems.append(f"{rel}: invalid namespace {meta['namespace']!r}")
+        elif any(s in KIND_DIRS.values() for s in str(meta["namespace"]).split("/")):
+            problems.append(f"{rel}: namespace {meta['namespace']!r} is named like a kind folder")
         if meta["kind"] not in KIND_DIRS:
             problems.append(f"{rel}: unknown kind {meta['kind']!r}")
         elif not inbox and dir_kinds[folder] != meta["kind"]:
@@ -762,6 +784,7 @@ def main(argv: list[str] | None = None) -> int:
         doc = None
         if "core" in levels:
             mcp_url = args.mcp or base + "/mcp"
+            doc = check_discovery(report, base)
             check_signin(report, base, mcp_url)
             if not token:
                 report.skip("core", "the six tools", "set LODESTONE_TOKEN to an owner token")
@@ -774,8 +797,8 @@ def main(argv: list[str] | None = None) -> int:
                     else:
                         report.skip("core", "the write tools", "run with --write to check them")
         if "federation" in levels:
-            doc = check_federation(report, base, args.publication,
-                                   os.environ.get("LODESTONE_PEER_CREDENTIAL", "").strip())
+            check_federation(report, base, doc, args.publication,
+                             os.environ.get("LODESTONE_PEER_CREDENTIAL", "").strip())
         if "moving" in levels:
             check_moving(report, base, doc, token)
     if args.json:

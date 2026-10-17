@@ -29,7 +29,7 @@ and extras.
 
 | Level | Required? | In short |
 | --- | --- | --- |
-| **Core** | Yes | The memory format, plus `context`, `recall`, `get`, `remember`, `checkpoint` and `forget` over MCP, with OAuth sign-in |
+| **Core** | Yes | The memory format, plus `context`, `recall`, `get`, `remember`, `checkpoint` and `forget` over MCP, OAuth sign-in, and a small discovery file |
 | **Federation** | No | `/.well-known/lodestone`, peers, guests, publications, the read-only shared tools |
 | **Moving** | No | "Download my memory" as a git bundle, import that keeps ids, a signed "moved to" record kept for 12 months, your own domain |
 
@@ -46,12 +46,12 @@ python3 conformance/lodestone_conformance.py repo path/to/memory-repo
 
 See [conformance/README.md](conformance/README.md).
 
-Results for the Lodestone server (version 0.27.0), run locally on 16 October 2026:
+Results for the Lodestone server (version 0.29.2), run locally on 17 October 2026, with `--write`:
 
 | Level | Result |
 | --- | --- |
-| Core | Pass (one warning: `recall` doesn't repeat its text in `structuredContent`) |
-| Federation | Pass, peers and publications included (one warning: no `levels` in the discovery document yet) |
+| Core | Pass, no warnings |
+| Federation | Pass, peers and publications included, no warnings |
 | Moving | Not supported yet |
 
 ## In this repository
@@ -59,7 +59,7 @@ Results for the Lodestone server (version 0.27.0), run locally on 16 October 202
 | Folder | What it holds |
 | --- | --- |
 | [`spec/`](spec/) | The specification |
-| [`schemas/`](schemas/) | JSON Schemas: note frontmatter, tool inputs, the discovery document, the moved record, the connections file |
+| [`schemas/`](schemas/) | JSON Schemas: note frontmatter, tool inputs, the discovery file, the moved record, the connections file |
 | [`conformance/`](conformance/) | The conformance suite |
 | [`examples/`](examples/) | An example memory repository and example documents |
 | [`tests/`](tests/) | Tests for the suite and the schemas |

@@ -102,8 +102,11 @@ A server that follows a publication, or is connected to a peer, and receives a m
    address.
 3. MUST check the signature if it has the old server's key on file, and SHOULD keep keys on file
    for every peer and publication it follows.
-4. If every check passes, SHOULD switch to the new address and carry on, keeping its credential and
-   follower id.
+4. If every check passes:
+   - for a publication, SHOULD switch to the new address and carry on, keeping its follower id;
+   - for a peer, MUST switch to the new address but MUST NOT expect its old credential to work there.
+     Credentials never move (section 5.6), so it shows its owner that it is waiting for a new invite
+     from the person who moved.
 5. MUST tell its owner what happened, whether it switched or not. It MUST NOT drop a peer or a
    publication silently.
 
@@ -121,30 +124,41 @@ If a check fails, it MUST keep the old address and tell its owner.
 
 ## 5.6 The connections file
 
-Peers, followers and apps are connected through credentials that live outside the memory
-repository. The connections file carries what can safely move:
+**No credential of any kind moves between providers.** What moves is the memory, its history, and
+the *list* of the owner's connections. Access is always granted again on the new server: someone
+who shared with the owner on one server has not agreed to share with them on another.
+
+The connections file is that list, with addresses, names and kinds only:
 
 ```json
 {
   "protocol": "lodestone/1",
   "owner": "https://alex.old-provider.example",
   "peers_in": [
-    {"id": "p_7c2e", "person": "sam", "url": "https://sam.example", "owner": "Sam",
-     "credential_sha256": "<hex SHA-256 of the credential>"}
+    {"url": "https://sam.example", "owner": "Sam", "person": "sam"}
   ],
   "peers_out": [
     {"url": "https://jo.example", "kind": "peer", "owner": "Jo"},
     {"url": "https://news.example", "kind": "publication", "slug": "garden-notes", "owner": "News"}
+  ],
+  "apps": [
+    {"name": "Claude"},
+    {"name": "VS Code"}
   ]
 }
 ```
 
-- `peers_in` lists servers that read from the owner. It holds only the SHA-256 hash (hex) of each
-  credential, never the credential. The new server MUST import these, so that the same peers can
-  keep calling with the same credentials.
-- `peers_out` lists the peers and publications the owner reads from. It MUST NOT hold their
-  credentials. After a move, the owner reconnects to peers with new invites; publications need no
-  credential, so the new server SHOULD re-subscribe to them on its own. See
-  [open question Q8](6-open-questions.md#q8-moving-credentials-for-peers-the-owner-reads-from).
-- Connected apps (OAuth grants) do not move. After a move to a new address, the owner signs in again
-  in each app. See [open question Q9](6-open-questions.md#q9-connected-apps-after-a-move).
+- The file MUST NOT hold any credential, token, key, or hash or fingerprint of one.
+- **`peers_in`: people who read from the owner.** After a move, the new server MUST show the owner
+  this list and let them invite each one again (one action per person). Their servers learn the new
+  address from the moved record and wait for that invite (section 5.4).
+- **`peers_out`: what the owner reads from others.**
+  - For each `peer`, the new server MUST show it and SHOULD offer a ready-to-send request asking that
+    person to share again.
+  - Publications need no credential, so the new server SHOULD subscribe to each `publication` again
+    on its own.
+- **`apps`: apps the owner had connected.** OAuth grants don't move. The new server SHOULD show
+  these as a checklist so the owner can sign in again in each one.
+- Followers of the owner's own publications need nothing: they follow the moved record (section 5.4).
+
+The schema is [`schemas/connections.schema.json`](../schemas/connections.schema.json).

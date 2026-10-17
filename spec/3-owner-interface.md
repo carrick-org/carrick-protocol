@@ -98,8 +98,14 @@ Write tools return a **note summary** in `structuredContent`:
 | `namespace`, `kind`, `title`, `status`, `created`, `updated` | As in the frontmatter |
 | `pinned` | `true` or `false` |
 
-Note that tools use the path as the `id`, and call the frontmatter `id` the `uid`. See
-[open question Q1](6-open-questions.md#q1-two-ids-for-one-note).
+Tools use the path as the `id`, and call the frontmatter `id` the `uid`. Both are returned
+everywhere a note is described.
+
+- Every tool that takes a note's id (`get`, `forget`, and any provider tool that reads a note) MUST
+  accept either its path or its `uid`.
+- A path changes when a note is renamed or its kind changes; a `uid` never does. Anything that keeps
+  a reference to a note for later (a link, a share, another note's `supersedes`) SHOULD use the
+  `uid`.
 
 ## 3.5 `context`
 
@@ -166,15 +172,15 @@ A hit's `kind` is the kind of document, not of note. Two values are defined: `me
 
 Returns a whole document by `id`.
 
-- `get` MUST accept every `id` that `recall`, `context` and the write tools return. It MAY also
-  accept a note's `uid`.
+- `get` MUST accept every `id` that `recall`, `context` and the write tools return, and a note's
+  `uid`.
 - For a note, the text MUST include its title and full body, and SHOULD include its frontmatter, so
   the agent can see its status.
 - `get` MUST keep working for retracted and superseded notes, so that an agent can follow
   `superseded_by` and see why a note was retracted.
 - `max_chars` (1,000 to 200,000; default 40,000) limits the text returned. A cut result MUST say it
   was cut.
-- `structuredContent` MUST have `id` and `text`.
+- `structuredContent` MUST have `id` and `text`, and `uid` for a note.
 - An unknown `id` MUST be a tool error.
 
 ## 3.8 `remember`
@@ -224,7 +230,7 @@ Retracts a note that is wrong or no longer relevant. Nothing is deleted.
 
 | Argument | Meaning |
 | --- | --- |
-| `id` | The note's `id` (or, where the server accepts it, its `uid`) |
+| `id` | The note's `id` (its path) or its `uid` |
 | `reason` | Why, in a few words |
 
 - The server MUST set `status: retracted`, keep the `reason`, update `updated`, and remove
@@ -247,3 +253,30 @@ Servers may offer more tools. Our implementation also has:
 
 A server that offers a tool with one of these names SHOULD make it do the same thing, so that
 agents are not surprised. A future version may move some of them into an optional level.
+
+## 3.12 The discovery file
+
+Every server publishes a small JSON file at `GET /.well-known/lodestone`, with no sign-in. It tells
+clients which version of the protocol the server speaks and which levels it supports.
+
+```json
+{
+  "protocol": "lodestone/1",
+  "base_url": "https://lodestone.example.com",
+  "levels": ["core"]
+}
+```
+
+- These three fields are required:
+  - `protocol` MUST be `lodestone/1`;
+  - `base_url` MUST be the address the server is reached at, over HTTPS (plain HTTP only for local
+    testing);
+  - `levels` MUST list `core`, and any of `federation` and `moving` that the server supports.
+- Other fields appear only when they apply: `endpoints`, `publications` and `owner` (chapter 4),
+  and the moved record and signing keys (chapter 5).
+- **The owner's name.** `owner.display_name` MUST NOT appear unless the owner has at least one
+  listed publication. A bare address then doesn't tell anyone whose memory lives there, or that
+  they have one at all.
+- Clients MUST ignore fields they don't recognise.
+
+The schema is [`schemas/discovery.schema.json`](../schemas/discovery.schema.json).

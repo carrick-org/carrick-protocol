@@ -35,9 +35,12 @@ A namespace is a path of one to five segments, such as `me`, `work` or `proj/gar
 - A namespace's notes live in `memory/<namespace>/<kind folder>/`. A child namespace, such as
   `proj/garden/2026` under `proj/garden`, is a separate namespace: its notes are not part of the
   parent's.
-- Owners SHOULD NOT use a kind folder name (`facts`, `decisions`, `preferences`, `people`,
-  `threads`, `entities`) as a namespace segment, because the path becomes hard to read. See
-  [open question Q3](6-open-questions.md#q3-namespace-segments-that-look-like-kind-folders).
+- A segment MUST NOT be a kind folder's name: `facts`, `decisions`, `preferences`, `people`,
+  `threads`, `entities` or `_inbox`. Otherwise `memory/proj/facts/` would hold both the facts of
+  `proj` and the folders of a namespace `proj/facts`. A server MUST refuse to create such a
+  namespace, and SHOULD suggest another word (for example `work/contacts` for `work/people`).
+- Any kind added in a later version gets a folder starting with `_`. Segments can't start with `_`,
+  so a new kind can never clash with an existing namespace.
 
 ## 2.3 Kinds and where notes go
 
@@ -51,6 +54,8 @@ Every note has one kind. The kind decides the folder:
 | `person` | `people/` | A person, for the knowledge graph |
 | `entity` | `entities/` | An organisation, place, project, event or thing, for the knowledge graph |
 | `thread` | `threads/` | The rolling state of a long-running piece of work (section 2.7) |
+
+Kind folders hold notes only, never other folders.
 
 Proposals that are not yet accepted (for example, from automatic distillation) MAY be kept in
 `memory/<namespace>/_inbox/`, with status `proposed`.
@@ -92,7 +97,7 @@ Writers MUST write these fields:
 | Field | Meaning |
 | --- | --- |
 | `id` | The note's permanent identifier. It never changes, even when the file is moved or renamed. Writers SHOULD use a [ULID](https://github.com/ulid/spec) (26 characters, Crockford base32). It MUST be unique within the repository. |
-| `namespace` | The namespace (section 2.2). It MUST match the folder the note is in. |
+| `namespace` | The namespace (section 2.2). Writers MUST put the note in that namespace's folder. If the folder and this line ever disagree, readers MUST go by this line. |
 | `kind` | One of the kinds in section 2.3. It MUST match the folder the note is in. |
 | `title` | A short, specific title, at most 200 characters, on one line. |
 | `status` | `active`, `superseded`, `retracted` or `proposed` (section 2.5). |
@@ -143,7 +148,8 @@ lines starting with `#`, and blank lines.
 ### Reading hand-written notes (informative)
 
 People sometimes write notes by hand. A lenient reader can fill in what is missing: the title from
-the first `# ` heading or the file name, the namespace and kind from the folders, `status: active`
+the first `# ` heading or the file name, the kind from its folder, the namespace from the folders
+between `memory/` and the kind folder (`memory/proj/x/facts/a.md` is in `proj/x`), `status: active`
 (or `proposed` in `_inbox/`), and the path as the `id`. Writers that later save such a note should
 then add the missing fields.
 

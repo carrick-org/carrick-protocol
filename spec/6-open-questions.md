@@ -4,17 +4,6 @@ These are the parts of 0.9 that we are not yet sure about. Some are awkward thin
 Lodestone works today that we did not want to freeze into the specification. Each one says what
 the draft does now. Comments are welcome as issues on this repository.
 
-## Q1. Two ids for one note
-
-A note has a permanent `id` in its frontmatter (a ULID), but the tools use its path
-(`memory/proj/garden/facts/beans.md`) as `id` and call the permanent one `uid`. Paths change when
-a note is renamed or its kind changes; uids don't. Today `get` accepts only the path, while
-`forget` and the federation `note` endpoint accept either.
-
-*Draft:* tools return the path as `id` and the ULID as `uid`; `get` MUST accept the path and MAY
-accept the uid. *Question:* should 1.0 require every tool to accept both, or switch tools to the
-uid?
-
 ## Q2. Document kinds in `recall`
 
 `recall`'s `kinds` filter and each hit's `kind` describe the kind of *document* (`memory`,
@@ -24,13 +13,6 @@ archive.
 
 *Draft:* only `memory` and `digest` are defined. *Question:* rename the argument (to `sources`?),
 and add a filter by note kind?
-
-## Q3. Namespace segments that look like kind folders
-
-A namespace such as `proj/facts` puts notes at `memory/proj/facts/facts/…`, which is hard to read
-and easy to get wrong. Today's server allows it.
-
-*Draft:* SHOULD NOT. *Question:* make it MUST NOT in 1.0?
 
 ## Q4. How much YAML
 
@@ -65,22 +47,6 @@ use today. Newer versions of MCP prefer Client ID Metadata Documents.
 
 *Question:* require either one, and move to metadata documents when clients do?
 
-## Q8. Moving credentials for peers the owner reads from
-
-When the owner moves, the credentials *they* hold for other people's servers are secrets, so the
-draft keeps them out of the connections file, and the owner has to ask each peer for a new invite.
-
-*Question:* add an encrypted part to the connections file (with a passphrase only the owner knows),
-so peers carry on without new invites?
-
-## Q9. Connected apps after a move
-
-OAuth grants don't move, so after a move to a new address the owner signs in again in every app.
-With their own domain, the address stays the same but the sign-in is still needed.
-
-*Question:* is signing in again acceptable for 1.0? Carrying grants across providers would need the
-two providers to trust each other.
-
 ## Q10. Signing keys for the moved record
 
 The draft signs the moved record with a key per owner that the old server publishes in its
@@ -96,13 +62,6 @@ the provider, and how is it rotated?
 
 *Question:* should they become an optional "Archive" level, so that agents can rely on them where
 they exist?
-
-## Q12. A discovery document for every server
-
-Today the discovery document (`/.well-known/lodestone`) belongs to Federation, so a Core-only
-server has no standard way to say which levels it supports.
-
-*Question:* require a minimal discovery document (`protocol`, `base_url`, `levels`) in Core?
 
 ## Q13. Small inconsistencies in Federation
 
@@ -122,3 +81,27 @@ their names be standard, so the same slash command works everywhere?
 
 The specification is named "Lodestone Protocol", and "Lodestone" is kept as a trademark (section 1).
 A trademark search has not been done yet.
+
+## Settled
+
+Decided by the editor on 17 October 2026. The numbers are kept so that earlier references still
+work.
+
+- **Q1. Two ids for one note.** Every tool and federation endpoint that takes a note's id accepts
+  either its path or its `uid`. Responses keep returning both (`id` is the path, `uid` the permanent
+  id). Long-term references should use the `uid`. See sections 3.4, 3.7, 3.10 and 4.4.
+- **Q3. Namespace segments that look like kind folders.** Not allowed: a segment can't be `facts`,
+  `decisions`, `preferences`, `people`, `threads`, `entities` or `_inbox`. Readers go by a note's
+  `namespace:` line when it disagrees with the folder. Kinds added later use folders starting with
+  `_`. See sections 2.2–2.4.
+- **Q8. Moving credentials for peers the owner reads from.** Credentials never move between
+  providers, not even encrypted, and not as a future option. Someone who shared with you on one
+  server decides again for the next: the new server lists those shares and offers a ready-to-send
+  request to each person. The connections file holds addresses, names and kinds only; the earlier
+  draft's hashes of incoming credentials are gone too, and the owner re-invites their readers. See
+  section 5.6.
+- **Q9. Connected apps after a move.** The owner signs in again in each app; the new server shows a
+  checklist of the apps they had connected. See section 5.6.
+- **Q12. A discovery file for every server.** Required in Core, with `protocol`, `base_url` and
+  `levels`; other fields only when they apply. The owner's name appears only once they have a
+  listed publication. See section 3.12.

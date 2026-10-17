@@ -34,7 +34,7 @@ A server says which levels it supports. Core is required; the others are optiona
 
 | Level | What it covers | Chapter |
 | --- | --- | --- |
-| **Core** (required) | The memory format and the owner interface (the MCP tools and sign-in) | [2](2-memory-format.md), [3](3-owner-interface.md) |
+| **Core** (required) | The memory format and the owner interface (the MCP tools, sign-in and the discovery file) | [2](2-memory-format.md), [3](3-owner-interface.md) |
 | **Federation** (optional) | Discovery, sharing with other servers, publications | [4](4-federation.md) |
 | **Moving** (optional) | Export and import, the "moved to" record, your own domain | [5](5-moving.md) |
 
@@ -68,8 +68,11 @@ Sections marked **(informative)** explain or give examples. Everything else is n
   `lodestone/1`, and it stays `lodestone/1` for every 0.x and 1.x version of this document.
 - Within `lodestone/1`, changes are additive: new optional fields, new optional tools, new
   endpoints. Clients MUST ignore fields they don't recognise.
-- A breaking change gets a new wire identifier (`lodestone/2`) and new paths. A server MAY serve
-  both.
+- **No breaking changes unless there is no other way.** Prefer additive changes: accept old and
+  new forms side by side, and add fields rather than rename them.
+- When a breaking change can't be avoided, it is announced well ahead: deprecation warnings in
+  responses, a note in the changelog, and a stated version or date for the break. It then gets a new
+  wire identifier (`lodestone/2`) and new paths. A server MAY serve both.
 - 0.9 is a draft. Things marked as open in [chapter 6](6-open-questions.md) may still change before
   1.0.
 
