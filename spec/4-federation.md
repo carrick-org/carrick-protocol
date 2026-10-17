@@ -23,7 +23,8 @@ Grants and publications are kept in the memory repository (`config/people.toml` 
 
 ## 4.2 Discovery
 
-`GET /.well-known/lodestone` returns:
+Every server has a discovery file (section 3.12). A Federation server adds what others need to find
+and follow it:
 
 ```json
 {
@@ -40,14 +41,13 @@ Grants and publications are kept in the memory repository (`config/people.toml` 
 }
 ```
 
-- `protocol` MUST be `lodestone/1`.
-- `base_url` MUST be the address the server is reached at, over HTTPS (plain HTTP is allowed only
-  for local testing). Peers compare it with the address they were given.
-- `levels` SHOULD list the levels the server supports: `core`, and any of `federation` and
-  `moving`. (New in 0.9.)
+- `protocol`, `base_url` and `levels` are as in section 3.12. Peers compare `base_url` with the
+  address they were given.
+- `endpoints` gives the MCP and federation paths.
 - `publications` lists only listed publications that have at least one release. A server MUST NOT
   list unlisted publications here.
-- Clients MUST ignore fields they don't recognise.
+- `owner` appears only when there is at least one listed publication (section 3.12). Peers that see
+  no name use the base URL as the owner's label.
 
 The schema is [`schemas/discovery.schema.json`](../schemas/discovery.schema.json).
 
@@ -85,6 +85,7 @@ Every endpoint lives under `/federation/v1/`.
   revocation apply to the very next request.
 - A note outside the caller's grants MUST look exactly like a note that does not exist (`404`).
 - Only active notes are shared: never the archive, digests or `_inbox/`.
+- Every endpoint that takes a note's id MUST accept either its path or its `uid` (section 3.4).
 
 **Endpoints**
 

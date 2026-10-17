@@ -2,40 +2,87 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://getlodestone.net/protocol/0.9/schemas/connections.schema.json",
   "title": "Lodestone connections file",
-  "description": "What can safely move of the owner's connections. Never holds a credential. See spec/5-moving.md (section 5.6).",
+  "description": "The list of the owner's connections that moves with them: addresses, names and kinds only. No credential, token, key, or hash of one. See spec/5-moving.md (section 5.6).",
   "type": "object",
-  "required": ["protocol", "owner", "peers_in", "peers_out"],
+  "required": [
+    "protocol",
+    "owner",
+    "peers_in",
+    "peers_out"
+  ],
   "properties": {
-    "protocol": {"const": "lodestone/1"},
-    "owner": {"type": "string"},
+    "protocol": {
+      "const": "lodestone/1"
+    },
+    "owner": {
+      "type": "string"
+    },
     "peers_in": {
+      "description": "People whose servers read from the owner; re-invited after a move.",
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "url", "credential_sha256"],
+        "required": [
+          "url"
+        ],
         "properties": {
-          "id": {"type": "string"},
-          "person": {"type": "string"},
-          "url": {"type": "string"},
-          "owner": {"type": "string"},
-          "credential_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          "url": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "person": {
+            "type": "string"
+          }
         },
-        "not": {"anyOf": [{"required": ["credential"]}, {"required": ["token"]}]}
+        "additionalProperties": false
       }
     },
     "peers_out": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["url", "kind"],
+        "required": [
+          "url",
+          "kind"
+        ],
         "properties": {
-          "url": {"type": "string"},
-          "kind": {"enum": ["peer", "publication"]},
-          "slug": {"type": "string"},
-          "owner": {"type": "string"}
+          "url": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "peer",
+              "publication"
+            ]
+          },
+          "slug": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          }
         },
-        "not": {"anyOf": [{"required": ["credential"]}, {"required": ["token"]}]}
+        "additionalProperties": false
+      }
+    },
+    "apps": {
+      "description": "Apps the owner had connected, for a sign-in checklist.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     }
-  }
+  },
+  "additionalProperties": false
 }

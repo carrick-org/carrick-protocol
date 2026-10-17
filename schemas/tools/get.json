@@ -6,7 +6,8 @@
   "type": "object",
   "properties": {
     "id": {
-      "type": "string"
+      "type": "string",
+      "description": "A document id (path) from a hit, or a note's uid."
     },
     "max_chars": {
       "type": "integer",

@@ -7,7 +7,7 @@
   "properties": {
     "id": {
       "type": "string",
-      "description": "Memory id (path) from recall, or its ULID."
+      "description": "The note's id (path) or its uid."
     },
     "reason": {
       "type": "string"

@@ -107,6 +107,9 @@ class RepoCheckTest(unittest.TestCase):
     def test_empty_body(self):
         self.assert_fails("memory/proj/garden/facts/x.md", self.note(body=""), "empty body")
 
+    def test_namespace_named_like_a_kind_folder(self):
+        self.assert_fails("memory/proj/people/facts/x.md", self.note(ns="proj/people"), "named like a kind folder")
+
     def test_not_in_a_kind_folder(self):
         self.assert_fails("memory/proj/garden/x.md", self.note(), "not in a kind folder")
 
@@ -152,9 +155,23 @@ class SchemaTest(unittest.TestCase):
                 self.validator(schema).validate(load(ROOT / "examples" / example))
 
     def test_connections_never_hold_a_credential(self):
-        doc = load(ROOT / "examples" / "connections.json")
-        doc["peers_out"][0]["credential"] = "x"
-        self.assertFalse(self.validator("connections.schema.json").is_valid(doc))
+        v = self.validator("connections.schema.json")
+        for where, key in (("peers_out", "credential"), ("peers_in", "credential_sha256"), ("apps", "token")):
+            with self.subTest(where=where, key=key):
+                doc = load(ROOT / "examples" / "connections.json")
+                doc[where][0][key] = "x"
+                self.assertFalse(v.is_valid(doc))
+
+    def test_discovery_minimum_and_owner_name(self):
+        v = self.validator("discovery.schema.json")
+        minimal = {"protocol": "lodestone/1", "base_url": "https://lodestone.example.com", "levels": ["core"]}
+        v.validate(minimal)
+        for missing in ("protocol", "base_url", "levels"):
+            self.assertFalse(v.is_valid({k: x for k, x in minimal.items() if k != missing}), missing)
+        named = {**minimal, "owner": {"display_name": "Alex"}}
+        self.assertFalse(v.is_valid(named))                                   # a name, but nothing published
+        self.assertFalse(v.is_valid({**named, "publications": []}))
+        v.validate({**named, "publications": [{"slug": "garden-notes", "mcp": "https://x.example/pub/garden-notes/mcp"}]})
 
     def test_tool_schemas_match_the_suite(self):
         for name, (required, optional) in lc.CORE_TOOLS.items():
