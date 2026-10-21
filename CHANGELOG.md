@@ -2,6 +2,12 @@
 
 ## 0.9 (draft), unreleased
 
+### 21 October 2026: the Carrick logo and badge
+
+- New `brand/` folder: the Waterline symbol, lockups, favicons, the GitHub avatar, colour tokens
+  and the "Carrick compatible" badge for servers that pass Core, plus the scripts that build them.
+  No change to the specification.
+
 ### 21 October 2026: the Carrick Protocol
 
 - The protocol is renamed the **Carrick Protocol**, and moves to `carrick-org/carrick-protocol`.

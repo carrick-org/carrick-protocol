@@ -1,0 +1,65 @@
+{
+  "color": {
+    "basalt": {
+      "value": "#1B2A31",
+      "use": "Primary ink: rock, wordmark, text on light"
+    },
+    "lough": {
+      "value": "#2A7C7C",
+      "use": "Sea accent on light backgrounds; badge message field"
+    },
+    "shallows": {
+      "value": "#74B8B2",
+      "use": "Sea accent on dark backgrounds"
+    },
+    "spray": {
+      "value": "#E4EBE9",
+      "use": "Rock on dark backgrounds; light tint"
+    },
+    "foam": {
+      "value": "#F1F5F4",
+      "use": "Wordmark and one-colour symbol on dark"
+    },
+    "ground": {
+      "value": "#F4F6F5",
+      "use": "Light page background"
+    },
+    "night": {
+      "value": "#15232A",
+      "use": "Dark page background"
+    },
+    "slate": {
+      "value": "#4D5D63",
+      "use": "Secondary text on light ('Protocol' in lockup)"
+    }
+  },
+  "font": {
+    "wordmark": {
+      "family": "Schibsted Grotesk",
+      "weight": 600,
+      "letterSpacing": "-0.03em",
+      "licence": "SIL OFL 1.1"
+    },
+    "text": {
+      "family": "Schibsted Grotesk",
+      "weights": [
+        400,
+        500,
+        600
+      ]
+    },
+    "mono": {
+      "family": "IBM Plex Mono",
+      "weights": [
+        400,
+        500
+      ],
+      "licence": "SIL OFL 1.1"
+    }
+  },
+  "symbol": {
+    "minSizeFull": "24px",
+    "smallVariantBelow": "24px",
+    "clearSpace": "one quarter of the symbol's width on every side"
+  }
+}

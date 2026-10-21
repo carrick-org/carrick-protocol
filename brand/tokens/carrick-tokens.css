@@ -1,0 +1,12 @@
+:root {
+  --carrick-basalt: #1B2A31;
+  --carrick-lough: #2A7C7C;
+  --carrick-shallows: #74B8B2;
+  --carrick-spray: #E4EBE9;
+  --carrick-foam: #F1F5F4;
+  --carrick-ground: #F4F6F5;
+  --carrick-night: #15232A;
+  --carrick-slate: #4D5D63;
+  --carrick-font-wordmark: 'Schibsted Grotesk', system-ui, sans-serif;
+  --carrick-font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
