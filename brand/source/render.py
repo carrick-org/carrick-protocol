@@ -22,6 +22,24 @@ jobs = [
     ("avatar/carrick-avatar.svg", "avatar/carrick-avatar-500.png", 500),
     ("avatar/carrick-avatar.svg", "avatar/carrick-avatar-1024.png", 1024),
 ]
+import re, glob
+
+def viewbox(path):
+    m = re.search(r'viewBox="([\d.\s-]+)"', open(path).read())
+    return [float(v) for v in m.group(1).split()]
+
+# Lockup PNGs at 240 px tall, only once the wordmark is outlined (live text
+# would render in a fallback face here).
+for p in sorted(glob.glob(J("lockup", "*.svg"))):
+    if "<text" in open(p).read():
+        continue
+    _, _, vw, vh = viewbox(p)
+    rel = os.path.relpath(p, root)
+    name = os.path.splitext(os.path.basename(p))[0]
+    jobs.append((rel, f"lockup/png/{name}-240.png", (round(240 * vw / vh), 240)))
+if os.path.exists(J("social", "carrick-social-card.svg")):
+    jobs.append(("social/carrick-social-card.svg", "social/carrick-social-card.png", (1280, 640)))
+
 extra = [a for a in sys.argv[2:]]  # optional "svg:png:w:h" jobs
 for e in extra:
     s, p, w, h = e.split(":")

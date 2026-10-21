@@ -136,7 +136,7 @@ def write(path, content):
 
 def build(out, wordmark_font=None):
     # Clear only generated folders, so README.md and source/ survive a rebuild.
-    for d in ("symbol", "lockup", "favicon", "avatar", "badge", "tokens"):
+    for d in ("symbol", "lockup", "favicon", "avatar", "badge", "tokens", "social"):
         if os.path.exists(os.path.join(out, d)):
             shutil.rmtree(os.path.join(out, d))
     files = {}
@@ -184,6 +184,10 @@ def build(out, wordmark_font=None):
     BASE = 88          # baseline in lockup space
 
     def lockup(rock, sea, ink, sub=None, sub_ink=None):
+        body, width = lockup_parts(rock, sea, ink, sub, sub_ink)
+        return svg(f"0 0 {round(width + 4)} {H}", body, title="Carrick" + (f" {sub}" if sub else ""))
+
+    def lockup_parts(rock, sea, ink, sub=None, sub_ink=None):
         sym = f'<g transform="scale({H/64}) translate(0 -4)">{sym_body(rock, sea)}</g>'
         x = H + GAP
         if ol:
@@ -191,9 +195,10 @@ def build(out, wordmark_font=None):
             text = f'<path d="{d}" fill="{ink}"/>'
             width = x + w
             if sub:
-                d2, w2 = ol_reg.path(sub, TS, width + 0.26 * TS, BASE, -0.01)
+                # leading space uses the font's own word space
+                d2, w2 = ol_reg.path(" " + sub, TS, width, BASE, -0.01)
                 text += f'<path d="{d2}" fill="{sub_ink}"/>'
-                width += 0.26 * TS + w2
+                width += w2
         else:
             text = live_text("Carrick", TS, x, BASE, ink)
             width = x + 330
@@ -202,7 +207,7 @@ def build(out, wordmark_font=None):
                         f'font-size="{TS}" fill="{ink}"><tspan font-weight="600" letter-spacing="-0.03em">Carrick</tspan>'
                         f'<tspan font-weight="400" letter-spacing="-0.01em" fill="{sub_ink}"> {sub}</tspan></text>')
                 width = x + 720
-        return svg(f"0 0 {round(width + 4)} {H}", sym + text, title="Carrick" + (f" {sub}" if sub else ""))
+        return sym + text, width
 
     put("lockup/carrick-lockup.svg", lockup(C["basalt"], C["lough"], C["basalt"]))
     put("lockup/carrick-lockup-on-dark.svg", lockup(C["spray"], C["shallows"], C["foam"]))
@@ -210,6 +215,25 @@ def build(out, wordmark_font=None):
     put("lockup/carrick-lockup-mono-white.svg", lockup("#FFFFFF", "#FFFFFF", "#FFFFFF"))
     put("lockup/carrick-protocol-lockup.svg", lockup(C["basalt"], C["lough"], C["basalt"], "Protocol", C["slate"]))
     put("lockup/carrick-protocol-lockup-on-dark.svg", lockup(C["spray"], C["shallows"], C["foam"], "Protocol", "#A9B8BC"))
+
+    # Social / Open Graph card (1280 x 640), only when the wordmark can be outlined
+    if ol:
+        W, Hc, M = 1280, 640, 96
+        body, lw = lockup_parts(C["spray"], C["shallows"], C["foam"], "Protocol", "#A9B8BC")
+        k = min(1.25, (W - 2 * M) / lw)
+        tag = "An open specification for AI memory you can take with you."
+        ts = 40
+        _, tw = ol_reg.path(tag, ts, 0, 0)
+        if tw > W - 2 * M:
+            ts = ts * (W - 2 * M) / tw
+        dt, _ = ol_reg.path(tag, ts, M, 374)
+        du, _ = Outliner(wordmark_font, 500).path("github.com/carrick-org/carrick-protocol", 26, M, 520)
+        card = (f'<rect width="{W}" height="{Hc}" fill="{C["night"]}"/>'
+                f'<g transform="translate({M} 144) scale({k:.4f})">{body}</g>'
+                f'<path d="{dt}" fill="#C9D5D7"/>'
+                f'<rect x="{M}" y="442" width="64" height="4" rx="2" fill="{C["shallows"]}"/>'
+                f'<path d="{du}" fill="{C["shallows"]}"/>')
+        put("social/carrick-social-card.svg", svg(f"0 0 {W} {Hc}", card, w=W, h=Hc, title="Carrick Protocol"))
 
     # README badge: shields "flat" geometry, text outlined in DejaVu Sans
     # (the fallback shields.io itself renders with), so it is identical everywhere.
