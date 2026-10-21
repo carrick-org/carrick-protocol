@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://getlodestone.net/protocol/0.9/schemas/note-frontmatter.schema.json",
-  "title": "Lodestone note frontmatter",
+  "$id": "https://raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/schemas/note-frontmatter.schema.json",
+  "title": "Carrick note frontmatter",
   "description": "The frontmatter of a note, as read into JSON. Values are strings, lists of strings or maps of strings, because the frontmatter syntax has no other types. See spec/2-memory-format.md.",
   "type": "object",
   "required": ["id", "namespace", "kind", "title", "status", "created", "updated"],

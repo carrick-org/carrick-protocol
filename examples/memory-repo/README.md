@@ -6,4 +6,4 @@ entity with typed links, a thread, a proposal in `_inbox/`, a digest, and a rela
 
 Check it with:
 
-    python3 conformance/lodestone_conformance.py repo examples/memory-repo
+    python3 conformance/carrick_conformance.py repo examples/memory-repo

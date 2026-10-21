@@ -2,6 +2,18 @@
 
 ## 0.9 (draft), unreleased
 
+### 21 October 2026: the Carrick Protocol
+
+- The protocol is renamed the **Carrick Protocol**, and moves to `carrick-org/carrick-protocol`.
+  Servers that pass Core are "Carrick compatible". Lodestone is the first server to implement it.
+- New wire names: `carrick/1`, `/.well-known/carrick` and `X-Carrick-Follower`. The earlier names
+  (`lodestone/1`, `/.well-known/lodestone`, `X-Lodestone-Follower`) mean the same and stay accepted
+  everywhere (section 1, Versioning). Nothing breaks.
+- The conformance suite is now `conformance/carrick_conformance.py` and reads `CARRICK_TOKEN`. The old
+  file name and `LODESTONE_TOKEN` still work. A server that only uses the earlier names gets warnings,
+  not failures.
+- Schema ids point at this repository (`raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/`).
+
 ### 17 October 2026: the connections file's address
 
 - Section 5.1: the connections file is also listed in the discovery file, as
@@ -26,7 +38,7 @@
 
 ### 16 October 2026: first draft
 
-First public draft of the Lodestone Protocol.
+First public draft of the Carrick Protocol.
 
 - Core: the memory format and the owner interface (six MCP tools and OAuth sign-in), written down
   from how Lodestone works today.

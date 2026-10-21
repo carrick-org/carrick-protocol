@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/context.json",
+  "$id": "https://raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/schemas/tools/context.json",
   "title": "Input of the `context` tool",
   "description": "Catch up on a namespace: its pinned note, latest thread state and recent notes. Without a namespace, lists the namespaces.",
   "type": "object",

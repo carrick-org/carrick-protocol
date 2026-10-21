@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "conformance"))
 
-import lodestone_conformance as lc  # noqa: E402
+import carrick_conformance as lc  # noqa: E402
 
 try:
     import jsonschema
@@ -164,8 +164,10 @@ class SchemaTest(unittest.TestCase):
 
     def test_discovery_minimum_and_owner_name(self):
         v = self.validator("discovery.schema.json")
-        minimal = {"protocol": "lodestone/1", "base_url": "https://lodestone.example.com", "levels": ["core"]}
+        minimal = {"protocol": "carrick/1", "base_url": "https://memory.example.com", "levels": ["core"]}
         v.validate(minimal)
+        v.validate({**minimal, "protocol": "lodestone/1"})                  # the earlier name stays valid
+        self.assertFalse(v.is_valid({**minimal, "protocol": "carrick/2"}))
         for missing in ("protocol", "base_url", "levels"):
             self.assertFalse(v.is_valid({k: x for k, x in minimal.items() if k != missing}), missing)
         named = {**minimal, "owner": {"display_name": "Alex"}}

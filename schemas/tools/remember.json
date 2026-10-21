@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/remember.json",
+  "$id": "https://raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/schemas/tools/remember.json",
   "title": "Input of the `remember` tool",
   "description": "Store one new note.",
   "type": "object",

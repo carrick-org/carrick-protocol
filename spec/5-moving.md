@@ -50,7 +50,7 @@ When the owner has moved, the old server tells everyone where they went.
 
 ```json
 {
-  "protocol": "lodestone/1",
+  "protocol": "carrick/1",
   "moved": {
     "from": "https://alex.old-provider.example",
     "to": "https://alex.new-provider.example",
@@ -76,7 +76,7 @@ When the owner has moved, the old server tells everyone where they went.
 
 **Where the old server serves it**
 
-- `GET /.well-known/lodestone` MUST return `200` with the discovery document, including `moved` and
+- `GET /.well-known/carrick` MUST return `200` with the discovery document, including `moved` and
   `signature` as above.
 - Every request to the old MCP address, the federation endpoints and publication addresses MUST be
   answered with `410 Gone` and the record as a JSON body, with `"error": "moved"` added. The
@@ -100,7 +100,7 @@ A server that follows a publication, or is connected to a peer, and receives a m
 (from a `410`, or from the discovery document):
 
 1. MUST check that `moved.from` is the address it was using.
-2. MUST fetch `moved.to` + `/.well-known/lodestone` and check that `moved_from` lists the old
+2. MUST fetch `moved.to` + `/.well-known/carrick` and check that `moved_from` lists the old
    address.
 3. MUST check the signature if it has the old server's key on file, and SHOULD keep keys on file
    for every peer and publication it follows.
@@ -134,7 +134,7 @@ The connections file is that list, with addresses, names and kinds only:
 
 ```json
 {
-  "protocol": "lodestone/1",
+  "protocol": "carrick/1",
   "owner": "https://alex.old-provider.example",
   "peers_in": [
     {"url": "https://sam.example", "owner": "Sam", "person": "sam"}
