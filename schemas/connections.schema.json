@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://getlodestone.net/protocol/0.9/schemas/connections.schema.json",
-  "title": "Lodestone connections file",
+  "$id": "https://raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/schemas/connections.schema.json",
+  "title": "Carrick connections file",
   "description": "The list of the owner's connections that moves with them: addresses, names and kinds only. No credential, token, key, or hash of one. See spec/5-moving.md (section 5.6).",
   "type": "object",
   "required": [
@@ -12,7 +12,7 @@
   ],
   "properties": {
     "protocol": {
-      "const": "lodestone/1"
+      "enum": ["carrick/1", "lodestone/1"]
     },
     "owner": {
       "type": "string"

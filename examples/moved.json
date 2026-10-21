@@ -1,5 +1,5 @@
 {
-  "protocol": "lodestone/1",
+  "protocol": "carrick/1",
   "error": "moved",
   "moved": {
     "from": "https://alex.old-provider.example",

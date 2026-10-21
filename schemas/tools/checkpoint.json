@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/checkpoint.json",
+  "$id": "https://raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/schemas/tools/checkpoint.json",
   "title": "Input of the `checkpoint` tool",
   "description": "Save the state of a long-running thread, replacing its previous state.",
   "type": "object",

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/get.json",
+  "$id": "https://raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/schemas/tools/get.json",
   "title": "Input of the `get` tool",
   "description": "Return a whole document by id.",
   "type": "object",

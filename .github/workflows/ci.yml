@@ -22,7 +22,7 @@ jobs:
       - name: Suite runs on the standard library alone
         run: |
           python -m unittest discover -s tests
-          python conformance/lodestone_conformance.py repo examples/memory-repo
+          python conformance/carrick_conformance.py repo examples/memory-repo
       - name: Schemas and examples
         run: |
           pip install jsonschema
