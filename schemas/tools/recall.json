@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://getlodestone.net/protocol/0.9/schemas/tools/recall.json",
+  "$id": "https://raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/schemas/tools/recall.json",
   "title": "Input of the `recall` tool",
   "description": "Search the memory. Returns ranked hits with ids that `get` can read.",
   "type": "object",

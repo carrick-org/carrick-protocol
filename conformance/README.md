@@ -1,13 +1,13 @@
 # Conformance suite
 
 One Python file, standard library only (Python 3.11 or later). It checks a running server, or a
-memory repository on disk, against the Lodestone Protocol 0.9, and says which levels pass.
+memory repository on disk, against the Carrick Protocol 0.9, and says which levels pass.
 
 ## Check a server
 
 ```sh
-export LODESTONE_TOKEN=...      # an owner token that can read and write everything
-python3 lodestone_conformance.py server https://lodestone.example.com --write
+export CARRICK_TOKEN=...        # an owner token that can read and write everything
+python3 carrick_conformance.py server https://memory.example.com --write
 ```
 
 - Tokens are read from the environment, never from the command line.
@@ -19,13 +19,13 @@ python3 lodestone_conformance.py server https://lodestone.example.com --write
 - `--levels core,federation,moving` picks the levels (all by default).
 - `--publication <slug>` checks a publication. Without it, the suite checks the first listed one.
 - To check the peer endpoints, connect a second server as a peer and put its credential in
-  `LODESTONE_PEER_CREDENTIAL`.
+  `CARRICK_PEER_CREDENTIAL`. (`LODESTONE_TOKEN` and `LODESTONE_PEER_CREDENTIAL`, the earlier names, also work.)
 - `--json` prints the results as JSON.
 
 ## Check a memory repository
 
 ```sh
-python3 lodestone_conformance.py repo path/to/memory-repo
+python3 carrick_conformance.py repo path/to/memory-repo
 ```
 
 This reads only. It checks the folders, the frontmatter of every note, the pinned notes, the digest

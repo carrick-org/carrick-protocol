@@ -1,8 +1,8 @@
-# Lodestone Protocol
+# Carrick Protocol
 
 **Version 0.9 (draft).** An open specification for AI memory you can take with you.
 
-A Lodestone server keeps one person's long-term memory for their AI agents: short notes about
+A Carrick server keeps one person's long-term memory for their AI agents: short notes about
 facts, decisions, preferences, people and ongoing work, and optionally an archive of past
 conversations. Agents read and write it over [MCP](https://modelcontextprotocol.io).
 
@@ -30,23 +30,24 @@ and extras.
 | Level | Required? | In short |
 | --- | --- | --- |
 | **Core** | Yes | The memory format, plus `context`, `recall`, `get`, `remember`, `checkpoint` and `forget` over MCP, OAuth sign-in, and a small discovery file |
-| **Federation** | No | `/.well-known/lodestone`, peers, guests, publications, the read-only shared tools |
+| **Federation** | No | `/.well-known/carrick`, peers, guests, publications, the read-only shared tools |
 | **Moving** | No | "Download my memory" as a git bundle, import that keeps ids, a signed "moved to" record kept for 12 months, your own domain |
 
-A server may call itself **Lodestone compatible** only if it passes the conformance suite at Core
+A server may call itself **Carrick compatible** only if it passes the conformance suite at Core
 level.
 
 ## Conformance suite
 
 ```sh
-export LODESTONE_TOKEN=...    # an owner token
-python3 conformance/lodestone_conformance.py server https://lodestone.example.com --write
-python3 conformance/lodestone_conformance.py repo path/to/memory-repo
+export CARRICK_TOKEN=...      # an owner token
+python3 conformance/carrick_conformance.py server https://memory.example.com --write
+python3 conformance/carrick_conformance.py repo path/to/memory-repo
 ```
 
 See [conformance/README.md](conformance/README.md).
 
-Results for the Lodestone server (version 0.29.2), run locally on 17 October 2026, with `--write`:
+Results for [Lodestone](https://getlodestone.net), the first implementation (version 0.29.2), run locally on 17 October 2026, with
+`--write`, under the protocol's earlier name (section 1, Versioning):
 
 | Level | Result |
 | --- | --- |
@@ -73,5 +74,8 @@ best place to start.
 ## Licences
 
 The specification text is under [CC BY 4.0](LICENSES/CC-BY-4.0.txt). The schemas, the conformance
-suite, the tests and the examples are under [Apache 2.0](LICENSES/Apache-2.0.txt). "Lodestone" is a
+suite, the tests and the examples are under [Apache 2.0](LICENSES/Apache-2.0.txt). "Carrick" is a
 trademark. See [LICENSE.md](LICENSE.md).
+
+**Earlier name.** This protocol was first published as the Lodestone Protocol (`lodestone/1`). Those names
+stay accepted everywhere; see [Versioning](spec/1-introduction.md#versioning).
