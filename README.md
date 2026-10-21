@@ -64,6 +64,7 @@ Results for [Lodestone](https://getlodestone.net), the first implementation (ver
 | [`conformance/`](conformance/) | The conformance suite |
 | [`examples/`](examples/) | An example memory repository and example documents |
 | [`tests/`](tests/) | Tests for the suite and the schemas |
+| [`brand/`](brand/) | The Carrick logo, favicons, avatar and the "Carrick compatible" badge |
 
 ## Taking part
 
