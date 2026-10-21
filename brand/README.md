@@ -7,7 +7,7 @@ The rock stays put while the water moves. Carrick comes from the Irish *carraig*
 Carrick is neutral infrastructure. Keep its mark separate from Lodestone's: never pair the
 Carrick symbol with Lodestone's amber, and never put the two marks in one lockup.
 
-Status: v1, selected 2026-10-21. The wordmark is still live text; see "Wordmark" below.
+Status: v1, selected 2026-10-21. Every file is self-contained: the wordmark is converted to outlines, so no font needs to be installed.
 
 ## Contents
 
@@ -16,7 +16,8 @@ Status: v1, selected 2026-10-21. The wordmark is still live text; see "Wordmark"
 | `symbol/` | `carrick-symbol.svg`, `-on-dark`, `-mono-basalt`, `-mono-white` | The symbol at 24 px and above |
 | `symbol/` | `carrick-symbol-small*.svg` | A redrawn 16-unit pixel-grid version for 16–23 px |
 | `symbol/png/` | 64–1024 px transparent PNGs | For places that can't take SVG |
-| `lockup/` | `carrick-lockup*.svg`, `carrick-protocol-lockup*.svg` | Symbol + wordmark, horizontal |
+| `lockup/` | `carrick-lockup*.svg`, `carrick-protocol-lockup*.svg`; PNGs 240 px tall in `lockup/png/` | Symbol + wordmark, horizontal |
+| `social/` | `carrick-social-card.svg`, `.png` (1280 × 640) | Open Graph and social preview image (GitHub: Settings › Social preview) |
 | `favicon/` | `favicon.svg` (switches with light/dark mode), `favicon.ico` (16/32/48), `favicon-16/32/48.png`, `apple-touch-icon.png` (180), `icon-192.png`, `icon-512.png` (maskable) | Websites and docs |
 | `avatar/` | `carrick-avatar.svg`, `carrick-avatar-500.png`, `-1024.png`, `carrick-app-icon-maskable.svg` | GitHub org, social profiles, app icons |
 | `badge/` | `carrick-compatible.svg` (20 px), `@2x`, `carrick-compatible-card.svg`, `-card-dark.svg` | The "Carrick compatible" conformance mark |
@@ -89,22 +90,11 @@ https://img.shields.io/badge/Carrick-compatible-2A7C7C?labelColor=1B2A31&logo=da
 
 **Website badge:** use `badge/carrick-compatible-card.svg` (light pages) or `-card-dark.svg` (dark pages), 280 × 68, linked to the conformance results.
 
-## Wordmark: open item
+## Wordmark
 
-This pack was built where the Schibsted Grotesk font file wasn't available. As a result:
-
-- the lockups and the text on the website card badge are **live text** that names Schibsted Grotesk. They render correctly only where that font is installed or loaded, and fall back to Inter or the system sans elsewhere;
-- there are no PNG lockups and no social or Open Graph card yet.
-
-To finish it, put `SchibstedGrotesk[wght].ttf` (the variable font from Google Fonts) next to the build scripts and run:
-
-```
-python3 brand/source/build.py brand --wordmark-font "SchibstedGrotesk[wght].ttf"
-python3 brand/source/render.py brand
-```
-
-That converts the wordmark to outlines at weights 600 and 400, with the font's pair kerning applied. After that, add PNG lockup and social-card render jobs to `render.py`.
-A designer can also outline the lockups by hand. The layout is a 112-unit symbol, a 22-unit gap, then 92-unit type on an 88-unit baseline.
+The wordmark, "Protocol" and the website card's text are outlined from Schibsted Grotesk (600 and
+400, with the font's own kerning), and the social card's URL from its 500 weight. The lockup layout
+is a 112-unit symbol, a 22-unit gap, then 92-unit type on an 88-unit baseline.
 
 ## Licence
 
@@ -114,5 +104,17 @@ Protocol, and the badge only as described above. The build scripts in `source/` 
 
 ## Regenerating
 
-From the repository root, run `brand/source/build.py brand` to rewrite every SVG and the tokens; README.md and `source/` are left in place. Then run `brand/source/render.py brand` to render the PNGs and `favicon.ico` with headless Chromium (needs `fonttools`, `Pillow` and `playwright`).
-The geometry lives in `build.py`: `ROCK`/`WAVES` for the 64-unit master and `ROCK_S`/`WAVES_S` for the 16-unit small version. Change it there, never in the output files.
+From the repository root, with Schibsted Grotesk's variable font (`SchibstedGrotesk-VariableFont_wght.ttf`
+from Google Fonts, SIL OFL 1.1; it isn't kept in this repository):
+
+```
+python3 brand/source/build.py brand --wordmark-font SchibstedGrotesk-VariableFont_wght.ttf
+python3 brand/source/render.py brand
+```
+
+`build.py` rewrites every SVG and the tokens, leaving README.md and `source/` in place. `render.py`
+renders the PNGs and `favicon.ico` with headless Chromium (needs `fonttools`, `Pillow` and
+`playwright`). Without `--wordmark-font`, the lockups fall back to live text and no social card or
+PNG lockups are made, so always pass it for a release.
+The geometry lives in `build.py`: `ROCK`/`WAVES` for the 64-unit master and `ROCK_S`/`WAVES_S` for the
+16-unit small version. Change it there, never in the output files.
