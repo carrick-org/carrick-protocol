@@ -80,8 +80,9 @@ their names be standard, so the same slash command works everywhere?
 ## Q15. Name and trademark
 
 The specification is named "Carrick Protocol", and "Carrick" is kept as a trademark (section 1). It was first
-published as the Lodestone Protocol; the earlier wire names stay accepted (section 1, Versioning). A trademark
-search for "Carrick" has not been done yet.
+published as the Lodestone Protocol; the earlier wire names stay accepted (section 1, Versioning). A first
+trademark search (October 2026) found no conflicting marks in the technology classes (9 and 42). Filing
+is deferred until the first implementation is proven.
 
 ## Settled
 
