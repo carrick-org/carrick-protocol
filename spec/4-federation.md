@@ -13,7 +13,7 @@ A server that supports Federation MUST do everything in this chapter that is mar
 - **Audience.** One of:
   - a **person** the owner invited, who connects their own agent to the owner's server (a guest,
     section 4.6);
-  - a **peer**: another Lodestone server, acting for a named person (section 4.3);
+  - a **peer**: another Carrick server, acting for a named person (section 4.3);
   - **everyone**: a **publication** (section 4.5).
 - **Release.** A publication's content as it was at one moment. Subscribers see only the latest
   release; later edits stay private until the owner releases again.
@@ -28,14 +28,14 @@ and follow it:
 
 ```json
 {
-  "protocol": "lodestone/1",
+  "protocol": "carrick/1",
   "owner": {"display_name": "Alex"},
-  "base_url": "https://lodestone.example.com",
+  "base_url": "https://memory.example.com",
   "levels": ["core", "federation"],
   "endpoints": {"mcp": "/mcp", "federation": "/federation/v1/"},
   "publications": [
     {"slug": "garden-notes", "title": "Garden notes",
-     "mcp": "https://lodestone.example.com/pub/garden-notes/mcp",
+     "mcp": "https://memory.example.com/pub/garden-notes/mcp",
      "release": "2026-10-14T09:00:00+00:00"}
   ]
 }
@@ -57,15 +57,15 @@ Peering is by invite only, and works in one direction. In what follows, A shares
 
 1. A's owner creates a peer invite for a person. An invite is a one-time code. It SHOULD expire
    within 24 hours, and A MUST store only a hash of it.
-2. B's owner gives B A's base URL and the code. B fetches `A/.well-known/lodestone` and checks the
+2. B's owner gives B A's base URL and the code. B fetches `A/.well-known/carrick` and checks the
    protocol.
 3. B calls `POST A/federation/v1/peer` with this body:
    `{"invite": "<code>", "base_url": "<B's base URL>"}`.
 4. A checks that the invite is valid and is a peer invite. A then fetches
-   `B/.well-known/lodestone` and checks that its `base_url` equals the one sent. If either check
+   `B/.well-known/carrick` and checks that its `base_url` equals the one sent. If either check
    fails, A answers `401` (invite) or `400` (address), and the invite MUST stay usable.
 5. A marks the invite used and answers:
-   `{"protocol": "lodestone/1", "peer_id": "...", "credential": "...", "owner": "<A's owner>"}`.
+   `{"protocol": "carrick/1", "peer_id": "...", "credential": "...", "owner": "<A's owner>"}`.
    A MUST store only a hash of the credential. B MUST keep the credential out of the memory
    repository and any other shared or versioned storage.
 
@@ -100,7 +100,7 @@ Every endpoint lives under `/federation/v1/`.
 | `POST peer` | see section 4.3 | A new credential |
 
 **Responses**
-- Every successful response includes `"protocol": "lodestone/1"` and `"owner": "<display name>"`.
+- Every successful response includes `"protocol": "carrick/1"` and `"owner": "<display name>"`.
 - Errors are JSON of the form `{"error": "..."}`, with these status codes:
   - `400`: a bad request;
   - `401`: an unknown or revoked credential, or a bad invite;
@@ -119,8 +119,8 @@ read.
 - A publication is also a remote MCP server at `/pub/<slug>/mcp`, with no sign-in. It MUST offer
   only the read-only shared tools (section 4.7) over the latest release, and MUST NOT expose
   anything outside it. A server SHOULD limit how often one client may call it.
-- **Counting followers.** A Lodestone server that follows a publication SHOULD send
-  `X-Lodestone-Follower: <id>` with each request, where `<id>` is a random value made for that one
+- **Counting followers.** A server that follows a publication SHOULD send
+  `X-Carrick-Follower: <id>` with each request, where `<id>` is a random value made for that one
   subscription. It tells the publisher how many different followers there are, never who they
   are. The publisher MUST NOT use it for anything else. A request without the header counts as
   someone looking, not following.

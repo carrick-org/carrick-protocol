@@ -1,5 +1,5 @@
 {
-  "protocol": "lodestone/1",
+  "protocol": "carrick/1",
   "owner": "https://alex.old-provider.example",
   "peers_in": [
     {

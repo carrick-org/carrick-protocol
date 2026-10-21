@@ -1,9 +1,9 @@
 {
-  "protocol": "lodestone/1",
+  "protocol": "carrick/1",
   "owner": {
     "display_name": "Alex"
   },
-  "base_url": "https://lodestone.example.com",
+  "base_url": "https://memory.example.com",
   "levels": [
     "core",
     "federation",
@@ -19,7 +19,7 @@
     {
       "slug": "garden-notes",
       "title": "Garden notes",
-      "mcp": "https://lodestone.example.com/pub/garden-notes/mcp",
+      "mcp": "https://memory.example.com/pub/garden-notes/mcp",
       "release": "2026-10-14T09:00:00+00:00"
     }
   ],

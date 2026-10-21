@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://getlodestone.net/protocol/0.9/schemas/discovery.schema.json",
-  "title": "Lodestone discovery document",
-  "description": "GET /.well-known/lodestone. Required in Core (spec/3-owner-interface.md, section 3.12); Federation and Moving add fields.",
+  "$id": "https://raw.githubusercontent.com/carrick-org/carrick-protocol/v0.9/schemas/discovery.schema.json",
+  "title": "Carrick discovery document",
+  "description": "GET /.well-known/carrick (or the earlier /.well-known/lodestone). Required in Core (spec/3-owner-interface.md, section 3.12); Federation and Moving add fields.",
   "type": "object",
   "required": [
     "protocol",
@@ -11,7 +11,7 @@
   ],
   "properties": {
     "protocol": {
-      "const": "lodestone/1"
+      "enum": ["carrick/1", "lodestone/1"]
     },
     "owner": {
       "type": "object",

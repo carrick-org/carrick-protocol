@@ -10,9 +10,9 @@ This repository uses two licences.
 The code is under Apache 2.0 for its patent grant: anyone who builds a server with the schemas and
 the suite gets a licence to the patents they need.
 
-"Lodestone" is a trademark. These licences don't grant any rights to it. Only servers that pass the
-conformance suite at Core level may call themselves "Lodestone compatible" (see
+"Carrick" is a trademark. These licences don't grant any rights to it. Only servers that pass the
+conformance suite at Core level may call themselves "Carrick compatible" (see
 [spec/1-introduction.md](spec/1-introduction.md#name-and-trademark)).
 
-The Lodestone server and Lodestone Cloud, which implement this specification, are separate and
+Lodestone and Lodestone Cloud, which implement this specification, are separate products and are
 not covered by these licences.

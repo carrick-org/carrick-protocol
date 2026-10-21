@@ -1,7 +1,7 @@
 # 6. Open questions
 
 These are the parts of 0.9 that we are not yet sure about. Some are awkward things in how
-Lodestone works today that we did not want to freeze into the specification. Each one says what
+Lodestone, the first server to implement it, works today that we did not want to freeze into the specification. Each one says what
 the draft does now. Comments are welcome as issues on this repository.
 
 ## Q2. Document kinds in `recall`
@@ -69,7 +69,7 @@ they exist?
   `"owner": "Alex"`.
 - Search hits carry `created`, while notes and changes carry `updated`.
 
-*Draft:* written down as they are. *Question:* tidy them in `lodestone/1` (by adding fields) or
+*Draft:* written down as they are. *Question:* tidy them in `carrick/1` (by adding fields) or
 leave them for v2?
 
 ## Q14. Prompts
@@ -79,8 +79,9 @@ their names be standard, so the same slash command works everywhere?
 
 ## Q15. Name and trademark
 
-The specification is named "Lodestone Protocol", and "Lodestone" is kept as a trademark (section 1).
-A trademark search has not been done yet.
+The specification is named "Carrick Protocol", and "Carrick" is kept as a trademark (section 1). It was first
+published as the Lodestone Protocol; the earlier wire names stay accepted (section 1, Versioning). A trademark
+search for "Carrick" has not been done yet.
 
 ## Settled
 
