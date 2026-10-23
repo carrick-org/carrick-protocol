@@ -4,7 +4,15 @@
   "title": "Carrick note frontmatter",
   "description": "The frontmatter of a note, as read into JSON. Values are strings, lists of strings or maps of strings, because the frontmatter syntax has no other types. See spec/2-memory-format.md.",
   "type": "object",
-  "required": ["id", "namespace", "kind", "title", "status", "created", "updated"],
+  "required": [
+    "id",
+    "namespace",
+    "kind",
+    "title",
+    "status",
+    "created",
+    "updated"
+  ],
   "properties": {
     "id": {
       "description": "Permanent, unique within the repository. Writers SHOULD use a ULID.",
@@ -16,7 +24,14 @@
       "pattern": "^[a-z0-9][a-z0-9._-]{0,63}(/[a-z0-9][a-z0-9._-]{0,63}){0,4}$"
     },
     "kind": {
-      "enum": ["fact", "decision", "preference", "person", "entity", "thread"]
+      "enum": [
+        "fact",
+        "decision",
+        "preference",
+        "person",
+        "entity",
+        "thread"
+      ]
     },
     "title": {
       "type": "string",
@@ -25,30 +40,55 @@
       "pattern": "^[^\\n]*$"
     },
     "status": {
-      "enum": ["active", "superseded", "retracted", "proposed"]
+      "enum": [
+        "active",
+        "superseded",
+        "retracted",
+        "proposed"
+      ]
     },
-    "created": {"$ref": "#/$defs/time"},
-    "updated": {"$ref": "#/$defs/time"},
+    "created": {
+      "$ref": "#/$defs/time"
+    },
+    "updated": {
+      "$ref": "#/$defs/time"
+    },
     "pinned": {
       "description": "Present only on the namespace's pinned note.",
-      "enum": ["true"]
+      "enum": [
+        "true"
+      ]
     },
-    "tags": {"$ref": "#/$defs/strings"},
+    "tags": {
+      "$ref": "#/$defs/strings"
+    },
     "author": {
       "type": "object",
       "properties": {
-        "agent": {"type": "string"},
-        "account": {"type": "string"},
-        "machine": {"type": "string"}
+        "agent": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "machine": {
+          "type": "string"
+        }
       },
-      "additionalProperties": {"type": "string"}
+      "additionalProperties": {
+        "type": "string"
+      }
     },
     "type": {
       "description": "For an entity: organisation, place, project, event or thing. Other values are allowed.",
       "type": "string"
     },
-    "aliases": {"$ref": "#/$defs/strings"},
-    "sources": {"$ref": "#/$defs/strings"},
+    "aliases": {
+      "$ref": "#/$defs/strings"
+    },
+    "sources": {
+      "$ref": "#/$defs/strings"
+    },
     "links": {
       "type": "array",
       "items": {
@@ -56,9 +96,19 @@
         "pattern": "^\\s*\\[\\[[^\\]]+\\]\\]\\s+[A-Za-z][A-Za-z0-9_ -]*?\\s+\\[\\[.+$"
       }
     },
-    "supersedes": {"$ref": "#/$defs/strings"},
-    "superseded_by": {"type": "string"},
-    "reason": {"type": "string"}
+    "supersedes": {
+      "$ref": "#/$defs/strings"
+    },
+    "superseded_by": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "removed_with": {
+      "description": "The namespace whose removal retracted this note (section 2.12).",
+      "type": "string"
+    }
   },
   "additionalProperties": true,
   "$defs": {
@@ -69,7 +119,9 @@
     },
     "strings": {
       "type": "array",
-      "items": {"type": "string"}
+      "items": {
+        "type": "string"
+      }
     }
   }
 }
