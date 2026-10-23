@@ -2,6 +2,14 @@
 
 ## 0.9 (draft), unreleased
 
+### 23 October 2026: renaming, merging and removing a namespace
+
+- New section 2.12, all optional (MAY): how a rename moves notes and digests and keeps uids, the
+  `[renamed]` table in `config/namespaces.toml` (prefix match, longest key wins, kept flat), merging
+  without widening what is shared, and removing a namespace with a `removed_with` key so it can be
+  restored exactly. Writers SHOULD resolve names through `[renamed]`.
+- New optional frontmatter field `removed_with`. Written down from Lodestone 0.33.
+
 ### 21 October 2026: the Carrick logo and badge
 
 - New `brand/` folder: the Waterline symbol, lockups, favicons, the GitHub avatar, colour tokens

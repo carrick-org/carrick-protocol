@@ -118,6 +118,7 @@ These fields are optional:
 | `supersedes` | The `id`s of notes this one replaces. |
 | `superseded_by` | The `id` of the note that replaced this one. |
 | `reason` | Why the note was retracted or superseded. |
+| `removed_with` | The namespace whose removal retracted this note (section 2.12). |
 
 - Readers MUST ignore fields they don't recognise. Writers MUST keep fields they don't recognise
   when they rewrite a note, so that one provider's extras survive a visit to another.
@@ -259,8 +260,9 @@ optional, and all are [TOML](https://toml.io):
 | `config/shares.toml` | What is shared with whom, and publications | Federation |
 
 A server MUST carry every file in `config/` across on export and import, including files it does
-not understand. Files for capture tools (ours has `config/namespaces.toml`, which maps folders and
-projects to namespaces) are allowed and are not part of this specification.
+not understand. Files for capture tools are allowed and are not part of this specification. Our own
+implementation's is `config/namespaces.toml`, which maps folders and projects to namespaces; only its `[renamed]` table
+is defined here (section 2.12).
 
 A relation type in `config/relations.toml` looks like this (informative):
 
@@ -274,6 +276,45 @@ words = ["works at", "works for"]
 [sibling_of]
 symmetric = true
 ```
+
+## 2.12 Renaming, merging and removing a namespace
+
+A server MAY let the owner rename, merge or remove a namespace. If it does, it does it as described
+here, so that the result reads the same everywhere.
+
+**Renaming.** Renaming `proj/old` to `proj/new`:
+
+- moves every note in `memory/proj/old/` to `memory/proj/new/`, child namespaces included
+  (`proj/old/x` becomes `proj/new/x`), and rewrites each note's `namespace:` line;
+- moves `digests/proj/old/` to `digests/proj/new/`;
+- never changes a note's `uid`. Its path, and so its tool `id`, does change. Because every tool also
+  accepts the `uid` (section 3.4), references kept by `uid` keep working;
+- records the rename in `config/namespaces.toml`, so that old names still reach the new namespace:
+
+  ```toml
+  [renamed]
+  "proj/old" = "proj/new"
+  ```
+
+**The `[renamed]` table.**
+
+- A key matches a namespace and all its children, by prefix: `proj/old/x` resolves to `proj/new/x`.
+  When several keys match, the longest wins.
+- The table is flat: renaming again rewrites the existing values rather than adding a chain.
+- An entry whose key is again the name of a namespace with notes is dropped.
+- A server that writes notes SHOULD resolve a namespace name through `[renamed]` before writing, so
+  that it doesn't recreate a renamed namespace under its old name. Readers that don't know the table
+  ignore it.
+
+**Merging.** Renaming onto a namespace that already has notes merges the two. Notes are moved as
+above, and a merge MUST NOT overwrite or drop a note. It also MUST NOT widen what is
+shared: if the namespace being merged away is shared as a folder or published (chapter 4), the
+server MUST refuse the merge until that share or publication is removed.
+
+**Removing.** Removing a namespace retracts every note in it and its children (section 2.5), and
+adds `removed_with: <namespace>` to each one. Restoring the namespace brings back exactly the notes
+with that key, not notes that were retracted one by one, and drops the key. Restoring a single note
+also drops it.
 
 A complete example repository is in [`examples/memory-repo/`](../examples/memory-repo/). The
 frontmatter is described as JSON Schema in
