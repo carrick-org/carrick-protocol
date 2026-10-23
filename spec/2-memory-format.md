@@ -260,8 +260,8 @@ optional, and all are [TOML](https://toml.io):
 | `config/shares.toml` | What is shared with whom, and publications | Federation |
 
 A server MUST carry every file in `config/` across on export and import, including files it does
-not understand. Files for capture tools are allowed and are not part of this specification. Ours is
-`config/namespaces.toml`, which maps folders and projects to namespaces; only its `[renamed]` table
+not understand. Files for capture tools are allowed and are not part of this specification. Our own
+implementation's is `config/namespaces.toml`, which maps folders and projects to namespaces; only its `[renamed]` table
 is defined here (section 2.12).
 
 A relation type in `config/relations.toml` looks like this (informative):
